@@ -4,5 +4,3 @@ export CLASSPATH=$CLASSPATH:`pwd`/Pokemon-MMO/:`pwd`/libs/lwjgl-2.7.1/jar/lwjgl.
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/libs/lwjgl-2.7.1/native/linux/
 
 javac @options @classes
-#-cp .:libs/lwjgl.jar
-#-Djava.library.path=libs/lwjgl-2.7.1/native/linux/

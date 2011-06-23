@@ -34,32 +34,43 @@ public class Texture2D {
 
 	public Texture2D() {}
 
-	public Texture2D(String fname) throws IOException {
-		textureID = createTextureID();				// Register a new texture with OpenGL
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);	// Bind the new texture
-		
-		BufferedImage image = ImageIO.read(new File(fname));	// Read in new image
-		int srcPixelFormat = 0;					// Check format
-		if (image.getColorModel().hasAlpha()) {
-			srcPixelFormat = GL11.GL_RGBA;
-		} else {
-			srcPixelFormat = GL11.GL_RGB;
+	public Texture2D(String fname) {
+		try {
+			BufferedImage image = ImageIO.read(new File(fname));	// Read in new image
+		} catch(IOException e) {
+			e.printStackTrace();
+			System.exit(0);
 		}
-		
-		width = image.getWidth();
+		width = image.getWidth();				// Set image properties
 		height = image.getHeight();
 
+		textureID = createTextureID();				// Register a new texture with OpenGL
+		buildTexture(image);					// Build the texture
+	}
+
+	public Texture2D(BufferedImage image) {
+		width = image.getWidth();				// Set image properties
+		height = image.getHeight();
+
+		textureID = createTextureID();				// Register a new texture with OpenGL
+		buildTexture(image);					// Build the texture
+	}
+
+	private buildTexture(BufferedImage image) {
+		int srcPixelFormat = 0;
 		ByteBuffer textureBuffer = null; 
 		WritableRaster raster = null;
 		BufferedImage texImage = null;
-		
+
 		// create a raster that can be used by OpenGL as a source for a texture
 		if (image.getColorModel().hasAlpha()) {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, image.getWidth(), image.getHeight(), 4, null);
 			texImage = new BufferedImage(glAlphaColorModel, raster, false, new Hashtable());
+			srcPixelFormat = GL11.GL_RGBA;
 		} else {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, image.getWidth(), image.getHeight(), 3, null);
 			texImage = new BufferedImage(glColorModel, raster, false, new Hashtable());
+			srcPixelFormat = GL11.GL_RGB;
 		}
 			
 		// copy the source image into the produced image
@@ -76,10 +87,11 @@ public class Texture2D {
 		textureBuffer.order(ByteOrder.nativeOrder()); 
 		textureBuffer.put(data, 0, data.length); 
 		textureBuffer.flip();
-		
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST); 									// set filters
+
+		bind();																	// Bind the new texture
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST); 							// set filters
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, image.getWidth(), image.getHeight(), 0, srcPixelFormat, GL11.GL_UNSIGNED_BYTE, textureBuffer);	// produce a texture
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, srcPixelFormat, GL11.GL_UNSIGNED_BYTE, textureBuffer);		// produce a texture
 	}
 
 	// Create a new texture ID 
@@ -91,6 +103,6 @@ public class Texture2D {
 
 	public void bind() { GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID); }	// Bind the specified GL context to a texture
 	
-	public int getWidth() { return width; }
-	public int getHeight() { return height; }
+	public int getWidth()	{ return width; }
+	public int getHeight()	{ return height; }
 }
