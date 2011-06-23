@@ -12,7 +12,8 @@ import java.nio.IntBuffer;
 
 public class Sprite extends Texture2D {
 
-	public Sprite(String fname) throws IOException { super(fname); }
+	public Sprite(String fname) { super(fname); }
+	public Sprite(BufferedImage image) { super(image); }
 
 	public void draw(int x, int y, float size) {
 		GL11.glPushMatrix();

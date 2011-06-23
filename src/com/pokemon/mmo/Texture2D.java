@@ -35,8 +35,9 @@ public class Texture2D {
 	public Texture2D() {}
 
 	public Texture2D(String fname) {
+		BufferedImage image = null;
 		try {
-			BufferedImage image = ImageIO.read(new File(fname));	// Read in new image
+			image = ImageIO.read(new File(fname));	// Read in new image
 		} catch(IOException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -56,7 +57,7 @@ public class Texture2D {
 		buildTexture(image);					// Build the texture
 	}
 
-	private buildTexture(BufferedImage image) {
+	private void buildTexture(BufferedImage image) {
 		int srcPixelFormat = 0;
 		ByteBuffer textureBuffer = null; 
 		WritableRaster raster = null;

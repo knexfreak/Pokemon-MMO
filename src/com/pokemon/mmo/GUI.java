@@ -42,6 +42,7 @@ public class GUI {
 	int count = 0;
 	Font font;
 	Sprite s;
+	Sprite r;
 
 	public void start() {
 		try {
@@ -53,14 +54,18 @@ public class GUI {
 		}
 
 		initGL();		// init OpenGL
+		font = new Font("assets/text.png", "assets/text.txt", 6, 13);
+		font.buildFont(2);	// build the textures for text
+		BufferedImage image = null;
 		try {
-			font = new Font("assets/text.png", "assets/text.txt", 6, 13);
-			font.buildFont(2);	// build the textures for text
-			s = new Sprite("assets/pokemon_sprites/front/643.png");
+			image = ImageIO.read(new File("assets/pokemon_sprites/front/644.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		image = image.getSubimage(0, 0, 40, 40);
+		r = new Sprite("assets/pokemon_sprites/front/644.png");
+		s = new Sprite("assets/pokemon_sprites/front/643.png");
 		getDelta();		// call once before loop to initialise lastFrame
 		lastFPS = getTime();	// call before loop to initialise fps timer
 		
@@ -154,6 +159,7 @@ public class GUI {
 		
 		s.draw(100, 400, 2f);
 		s.draw(300, 400, 2.23f);
+		r.draw(200, 200, 3f);
 
 		GL11.glColor3f(0.5f, 0.5f, 1.0f);					// R,G,B,A Set The Color To Blue One Time Only
 		GL11.glPushMatrix();							// draw quad

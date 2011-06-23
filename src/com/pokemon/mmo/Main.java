@@ -15,8 +15,8 @@ public class Main {
 	public static GUI gui = null;
 
 	public static void main(String[] args) {
-		mSpeciesArray = PokemonSpeciesFactory.createSpeciesArray();
-		mMoveArray = MoveFactory.createMoveArray();
+		//mSpeciesArray = PokemonSpeciesFactory.createSpeciesArray();
+		//mMoveArray = MoveFactory.createMoveArray();
 		gui = new GUI();
 		gui.start();
 
