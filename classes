@@ -30,7 +30,7 @@ src/com/pokemon/mmo/PokemonSpecies.java
 #src/com/pokemon/mmo/Pursuit.java
 #src/com/pokemon/mmo/Squirtle.java
 
-src/com/pokemon/mmo/GUI.java
-src/com/pokemon/mmo/Font.java
-src/com/pokemon/mmo/Sprite.java
-src/com/pokemon/mmo/Texture2D.java
+src/com/pokemon/mmo/gui/GUI.java
+src/com/pokemon/mmo/gui/Font.java
+src/com/pokemon/mmo/gui/Sprite.java
+src/com/pokemon/mmo/gui/Texture2D.java

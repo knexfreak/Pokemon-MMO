@@ -7,6 +7,8 @@ import java.util.Random;
 
 import com.pokemon.mmo.Enums.Ability;
 
+import com.pokemon.mmo.gui.GUI;
+
 public class Main {
 
 	public static PokemonSpecies[] mSpeciesArray;

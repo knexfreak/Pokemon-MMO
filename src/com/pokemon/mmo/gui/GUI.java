@@ -1,4 +1,4 @@
-package com.pokemon.mmo;
+package com.pokemon.mmo.gui;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;

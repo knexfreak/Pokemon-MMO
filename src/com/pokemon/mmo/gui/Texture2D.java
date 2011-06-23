@@ -1,4 +1,4 @@
-package com.pokemon.mmo;
+package com.pokemon.mmo.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
