@@ -59,6 +59,7 @@ public class GUI {
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(new File("assets/pokemon_sprites/front/644.png"));
+			TexturePack2D pack = new TexturePack2D("assets/tileset2.png", "assets/tileset.dat", 16, 16);
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(0);

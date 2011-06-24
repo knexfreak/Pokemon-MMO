@@ -34,3 +34,4 @@ src/com/pokemon/mmo/gui/GUI.java
 src/com/pokemon/mmo/gui/Font.java
 src/com/pokemon/mmo/gui/Sprite.java
 src/com/pokemon/mmo/gui/Texture2D.java
+src/com/pokemon/mmo/gui/TexturePack2D.java

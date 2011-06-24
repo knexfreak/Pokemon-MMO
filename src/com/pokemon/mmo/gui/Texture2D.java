@@ -12,13 +12,12 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.File;
+import javax.imageio.ImageIO;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Hashtable;
-
-import javax.imageio.ImageIO;
 
 import org.lwjgl.opengl.GL11;
 
