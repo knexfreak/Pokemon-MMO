@@ -27,55 +27,45 @@ import java.util.Hashtable;
 
 public class GUI {
 
-	float x = 400, y = 300;		// position of quad
-	float rotation = 0;		// angle of quad rotation
-	long lastFrame;			// time at last frame
-	int fps;			// frames per second
-	long lastFPS;			// last fps time
-	boolean finished = false;
-
-	BufferedImage letter_text_pack = null;
-	int num_letters = 0;
-	BufferedImage[] letters = null;
-	int textID;
-	int letterno = 0;
-	int count = 0;
-	Font font;
-	Sprite s;
-	Sprite r;
+	private int width = 0;
+	private int height = 0;
+	private boolean finished = false;
+	private TexturePack2D map_pack = null;
+	
+	public GUI(int w, int h) {
+		width = w;
+		height = h;
+	}
 
 	public void start() {
 		try {
-			Display.setDisplayMode(new DisplayMode(800,600));
+			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 
-		initGL();		// init OpenGL
-		font = new Font("assets/text.png", "assets/text.txt", 6, 13);
-		font.buildFont(2);	// build the textures for text
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File("assets/pokemon_sprites/front/644.png"));
-			TexturePack2D pack = new TexturePack2D("assets/tileset2.png", "assets/tileset.dat", 16, 16);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(0);
-		}
-		image = image.getSubimage(0, 0, 40, 40);
-		r = new Sprite("assets/pokemon_sprites/front/644.png");
-		s = new Sprite("assets/pokemon_sprites/front/643.png");
-		getDelta();		// call once before loop to initialise lastFrame
-		lastFPS = getTime();	// call before loop to initialise fps timer
+		initGL();						// init OpenGL
+		map_pack = new TexturePack2D("assets/tileset.png", 16, 16);	// load map texture pack--cant be done in constructor since display is not initialized
+		
+//		font = new Font("assets/text.png", "assets/text.txt", 6, 13);
+//		font.buildFont(2);	// build the textures for text
+//		BufferedImage image = null;
+//		try {
+//			image = ImageIO.read(new File("assets/pokemon_sprites/front/644.png"));
+//			TexturePack2D pack = new TexturePack2D("assets/tileset2.png", 16, 16);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			System.exit(0);
+//		}
+//		image = image.getSubimage(0, 0, 40, 40);
+//		r = new Sprite("assets/pokemon_sprites/front/644.png");
+//		s = new Sprite("assets/pokemon_sprites/front/643.png");
 		
 		while (!Display.isCloseRequested() && !finished) {
-			int delta = getDelta();
-			
-			update(delta);
+			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) finished = true;
 			renderGL();
-
 			Display.update();
 			Display.sync(60); // cap fps to 60fps
 
@@ -87,94 +77,20 @@ public class GUI {
 	public void initGL() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, 800, 600, 0, 1, -1);
+		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
-	
-
-
-	public void update(int delta) {
-		// rotate quad
-		rotation += 0.15f * delta;
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) x -= 0.35f * delta;
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) x += 0.35f * delta;
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) y -= 0.35f * delta;
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) y += 0.35f * delta;
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) finished = true;
-		
-		// keep quad on the screen
-		if (x < 0) x = 0;
-		if (x > 800) x = 800;
-		if (y < 0) y = 0;
-		if (y > 600) y = 600;
-		
-		updateFPS(); // update FPS Counter
-	}
-	
-	/** 
-	 * Calculate how many milliseconds have passed 
-	 * since last frame.
-	 * 
-	 * @return milliseconds passed since last frame 
-	 */
-	public int getDelta() {
-		long time = getTime();
-		int delta = (int) (time - lastFrame);
-		lastFrame = time;
-	 
-		return delta;
-	}
-	
-	// Get the accurate system time
-	public long getTime() { return (Sys.getTime() * 1000) / Sys.getTimerResolution(); }
-	
-	/**
-	 * Calculate the FPS and set it in the title bar
-	 */
-	public void updateFPS() {
-		if (getTime() - lastFPS > 1000) {
-			Display.setTitle("FPS: " + fps);
-			fps = 0;
-			lastFPS += 1000;
-		}
-		fps++;
-	}
-	
-
 
 	public void renderGL() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
-
-		GL11.glColor3f(0.5f,0.5f,1.0f);						// set the color of the quad (R,G,B,A)
-		GL11.glBegin(GL11.GL_QUADS);						// draw quad
-			GL11.glVertex2f(100,100);
-			GL11.glVertex2f(100+200,100);
-			GL11.glVertex2f(100+200,100+200);
-			GL11.glVertex2f(100,100+200);
-		GL11.glEnd();
-
-		font.draw_str("HELLO", 150, 150);
 		
-		s.draw(100, 400, 2f);
-		s.draw(300, 400, 2.23f);
-		r.draw(200, 200, 3f);
+		map_pack.getTile(17, 11).draw(100, 100, 3);
 
-		GL11.glColor3f(0.5f, 0.5f, 1.0f);					// R,G,B,A Set The Color To Blue One Time Only
-		GL11.glPushMatrix();							// draw quad
-			GL11.glTranslatef(x, y, 0);
-			GL11.glRotatef(rotation, 0f, 0f, 1f);
-			GL11.glTranslatef(-x, -y, 0);
-			
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex2f(x - 50, y - 50);
-				GL11.glVertex2f(x + 50, y - 50);
-				GL11.glVertex2f(x + 50, y + 50);
-				GL11.glVertex2f(x - 50, y + 50);
-			GL11.glEnd();
-		GL11.glPopMatrix();
+//		font.draw_str("HELLO", 1000, 700);
+//		
+//		s.draw(100, 400, 2f);
+//		s.draw(300, 400, 2.23f);
+//		r.draw(200, 200, 3f);
 	}
 }
 
